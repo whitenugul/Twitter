@@ -1,9 +1,28 @@
 import express from 'express';
 import * as tweetController from '../controller/tweet.js'
+import {body} from 'express-validator';
+import {validate} from '../middleware/validator.js'
+
 const router = express.Router();
+
 
 // API 생성
 // 1. GET
+
+const validateTweet = [
+    body('text')
+    .trim()
+    .isLength({min: 4})
+    .withMessage('text는 최소 4자 이상 입력해주세요'),
+    validate
+]
+// const validate = (req, res, next) => {
+    // const errors = validationResult(req); // error가 생길 경우 error값이 들어간다.
+    // if (errors.isEmpty()){
+    //     return next(); // 에러가 없을 경우 다음으로 넘어간다.
+    // }
+    // return res.status(400).json({message: errors.array()})
+// }
 
 // username으로 찾아보기
 // /tweets?username=:username
@@ -15,11 +34,22 @@ router.get('/:id', tweetController.getTweetsById);
 
 // 2. POST
 // id: Date.now().toString()
-router.post('/', tweetController.PostTweet);
+// text가 4자이하인경우 error처리
+// router.post('/', [
+//     body('text').trim().isLength({min:4}).withMessage('4글자 이상으로 입력하세요'),
+//     validate
+// ],
+// tweetController.PostTweet);
+router.post('/', validateTweet, tweetController.PostTweet)
 
 // 3. PUT 수정
 // text만 수정
-router.put('/:id', tweetController.UpdateTweet);
+// text가 4자이하인경우 error처리
+router.put('/:id', [
+    body('text').trim().isLength({min:4}).withMessage('4글자 이상으로 입력하세요'),
+    validate
+],
+tweetController.UpdateTweet);
 
 // 4. DELETE
 router.delete('/:id',tweetController.DeleteTweet);
