@@ -3,6 +3,7 @@ import express from 'express'; //npm i express
 import cors from 'cors'; //npm i cors
 import morgan from 'morgan'; //npm i morgan
 import tweetsRouter from './router/tweets.js'
+import authRouter from './router/auth.js'
 
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(morgan('tiny')); // 사용자들이 들어오면 log를 console에 찍�
 
 // 미들웨어 등록
 app.use('/tweets', tweetsRouter);
+app.use('/auth', authRouter);
 
 
 app.use((req, res, next) => {

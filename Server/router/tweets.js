@@ -2,6 +2,7 @@ import express from 'express';
 import * as tweetController from '../controller/tweet.js'
 import {body} from 'express-validator';
 import {validate} from '../middleware/validator.js'
+import {isAuth} from '../middleware/auth.js'
 
 const router = express.Router();
 
@@ -26,11 +27,11 @@ const validateTweet = [
 
 // username으로 찾아보기
 // /tweets?username=:username
-router.get('/', tweetController.getTweets);
+router.get('/', isAuth, tweetController.getTweets);
 
 // id로 찾아보기
 // /tweets/:id
-router.get('/:id', tweetController.getTweetsById);
+router.get('/:id', isAuth, tweetController.getTweetsById);
 
 // 2. POST
 // id: Date.now().toString()
@@ -40,19 +41,15 @@ router.get('/:id', tweetController.getTweetsById);
 //     validate
 // ],
 // tweetController.PostTweet);
-router.post('/', validateTweet, tweetController.PostTweet)
+router.post('/', isAuth, validateTweet, tweetController.PostTweet)
 
 // 3. PUT 수정
 // text만 수정
 // text가 4자이하인경우 error처리
-router.put('/:id', [
-    body('text').trim().isLength({min:4}).withMessage('4글자 이상으로 입력하세요'),
-    validate
-],
-tweetController.UpdateTweet);
+router.put('/:id', isAuth,validateTweet,tweetController.UpdateTweet);
 
 // 4. DELETE
-router.delete('/:id',tweetController.DeleteTweet);
+router.delete('/:id', isAuth, tweetController.DeleteTweet);
 
 // postman에서 collection으로 들어가 twitter라는 이름으로 생성한다.
 // variable에서 반복될 url을 저장한다.
