@@ -31,7 +31,7 @@ router.get('/', isAuth, tweetController.getTweets);
 
 // id로 찾아보기
 // /tweets/:id
-router.get('/:id', isAuth, tweetController.getTweetsById);
+router.get('/:id', isAuth, tweetController.getTweet);
 
 // 2. POST
 // id: Date.now().toString()
@@ -41,12 +41,12 @@ router.get('/:id', isAuth, tweetController.getTweetsById);
 //     validate
 // ],
 // tweetController.PostTweet);
-router.post('/', isAuth, validateTweet, tweetController.PostTweet)
+router.post('/', isAuth, validateTweet, tweetController.createTweet)
 
 // 3. PUT 수정
 // text만 수정
 // text가 4자이하인경우 error처리
-router.put('/:id', isAuth,validateTweet,tweetController.UpdateTweet);
+router.put('/:id', isAuth,validateTweet,tweetController.updateTweet);
 
 // 4. DELETE
 router.delete('/:id', isAuth, tweetController.DeleteTweet);
